@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>To-Do Life Dashboard</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📋</text></svg>" />
+
+  <!-- Google Fonts: Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ===== HEADER: Clock & Greeting ===== -->
+  <header class="card header-card" aria-label="Jam dan sapaan">
+
+    <label class="theme-switch" aria-label="Ganti tema terang/gelap" title="Ganti tema">
+      <input type="checkbox" id="theme-toggle-btn" role="switch" aria-checked="false" />
+      <span class="theme-switch__track">
+        <span class="theme-switch__icon theme-switch__icon--light">☀️</span>
+        <span class="theme-switch__icon theme-switch__icon--dark">🌙</span>
+      </span>
+      <span class="theme-switch__thumb"></span>
+    </label>
+
+    <time id="clock-time" datetime="">00:00:00</time>
+    <time id="clock-date" datetime="">Memuat tanggal…</time>
+
+    <h1 id="greeting">Selamat datang!</h1>
+
+    <form class="name-editor" id="name-editor-form" novalidate>
+      <button type="button" id="name-edit-btn" class="btn btn-sm" aria-label="Ubah nama pengguna">Ubah nama</button>
+      <input
+        id="name-edit-input"
+        class="hidden"
+        type="text"
+        maxlength="50"
+        placeholder="Nama kamu… (kosongkan untuk hapus)"
+        aria-label="Input nama pengguna"
+      />
+      <button type="submit" id="name-save-btn" class="btn btn-sm btn-primary hidden" aria-label="Simpan nama">Simpan</button>
+      <button type="button" id="name-cancel-btn" class="btn btn-sm hidden" aria-label="Batal ubah nama">Batal</button>
+    </form>
+    <p id="name-error" class="error-msg" role="alert" aria-live="polite"></p>
+
+  </header>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main>
+
+    <!-- ===== Focus Timer ===== -->
+    <section class="card" aria-label="Timer fokus Pomodoro">
+      <h2 class="card-title">⏱ Timer Fokus</h2>
+
+      <output id="timer-display" aria-live="off" aria-label="Sisa waktu timer">25:00</output>
+
+      <p id="timer-notification" class="timer-notification hidden" role="status" aria-live="polite"></p>
+
+      <fieldset class="timer-controls">
+        <legend class="visually-hidden">Kontrol timer</legend>
+        <button id="timer-start-btn" class="btn btn-primary" aria-label="Mulai timer">Mulai</button>
+        <button id="timer-stop-btn" class="btn btn-outline" aria-label="Hentikan timer">Stop</button>
+        <button id="timer-reset-btn" class="btn btn-outline" aria-label="Reset timer">Reset</button>
+      </fieldset>
+
+      <fieldset id="timer-preset-btns" class="timer-presets">
+        <legend class="visually-hidden">Pilihan durasi preset</legend>
+        <button class="btn btn-sm preset-btn" data-minutes="15" aria-label="Set timer 15 menit">15 mnt</button>
+        <button class="btn btn-sm preset-btn" data-minutes="25" aria-label="Set timer 25 menit">25 mnt</button>
+        <button class="btn btn-sm preset-btn" data-minutes="45" aria-label="Set timer 45 menit">45 mnt</button>
+      </fieldset>
+
+      <form class="timer-custom-form" id="timer-custom-form" novalidate>
+        <label for="timer-custom-input" class="label-sm">Durasi kustom (1–120 menit):</label>
+        <div class="timer-custom-row">
+          <input
+            id="timer-custom-input"
+            type="number"
+            min="1"
+            max="120"
+            placeholder="Masukkan menit (1–120)"
+            aria-label="Input durasi kustom dalam menit"
+          />
+          <button type="submit" class="btn btn-sm btn-primary">Set</button>
+        </div>
+      </form>
+
+      <p id="timer-error" class="error-msg" role="alert" aria-live="polite"></p>
+    </section>
+
+    <!-- ===== Quick Links ===== -->
+    <section class="card" aria-label="Tautan cepat">
+      <h2 class="card-title">🔗 Tautan Cepat</h2>
+
+      <form class="link-form" id="link-add-form" novalidate>
+        <input
+          id="link-name-input"
+          type="text"
+          placeholder="Nama situs"
+          aria-label="Nama tautan"
+        />
+        <input
+          id="link-url-input"
+          type="text"
+          placeholder="URL (contoh: github.com)"
+          aria-label="URL tautan"
+        />
+        <button type="submit" id="link-add-btn" class="btn btn-primary" aria-label="Tambah tautan baru">Tambah</button>
+      </form>
+
+      <p id="link-error" class="error-msg" role="alert" aria-live="polite"></p>
+
+      <ul id="link-list" aria-label="Daftar tautan cepat">
+        <!-- Rendered by JS -->
+      </ul>
+    </section>
+
+    <!-- ===== To-Do List (full width) ===== -->
+    <section class="card todo-section" aria-label="Daftar tugas">
+      <h2 class="card-title">✅ Daftar Tugas</h2>
+
+      <p id="todo-counter">0 dari 0 tugas selesai</p>
+
+      <form class="todo-add-form" id="todo-add-form" novalidate>
+        <input
+          id="todo-input"
+          type="text"
+          maxlength="200"
+          placeholder="Tambah tugas baru…"
+          aria-label="Input tugas baru"
+        />
+        <button type="submit" id="todo-add-btn" class="btn btn-primary" aria-label="Tambah tugas">Tambah</button>
+      </form>
+
+      <p id="todo-empty" class="hidden" role="status">Belum ada tugas. Yuk tambah satu!</p>
+
+      <ul id="todo-list" aria-label="Daftar tugas pengguna">
+        <!-- Rendered by JS -->
+      </ul>
+    </section>
+
+  </main>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
